@@ -24,7 +24,7 @@ login(loginData, (err, api) => {
     })
 
     api.listen((err, message) => {
-        console.log('Message received:' + message.body)
+        console.log('Message received (from id ' + message.senderID + '): ' + message.body)
         //api.sendMessage(message.body, message.threadID);
     });
 });
