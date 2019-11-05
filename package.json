@@ -1,0 +1,14 @@
+{
+  "name": "adp-bot-messenger",
+  "version": "1.0.0",
+  "description": "Facebook messenger bot for adp referendum",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "facebook-chat-api": "^1.6.1"
+  }
+}
