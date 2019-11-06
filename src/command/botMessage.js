@@ -24,10 +24,8 @@ exports.getRandomMessage = () => {
 
 exports.getHelpMessage = () => {
     let helpMessage = `
-    !adp commande
-    Commandes : 
-    - info: décompte du temps restant avant la fin du référendum
-    - help: affiche message d'aide
+    !adp info - décompte du temps restant avant la fin du référendum
+    !adp help - affiche message d'aide
     `
     console.log(helpMessage)
     return helpMessage
