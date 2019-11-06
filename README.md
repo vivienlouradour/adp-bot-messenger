@@ -1,5 +1,9 @@
 # ADP bot messenger
 
+Spam for french ADP referendum.  
+Add it to a group conversation and it will start to spam.  
+[https://www.facebook.com/bot.adp.5](https://www.facebook.com/bot.adp.5)    
+
 ## Production with Docker
 
 ```bash
