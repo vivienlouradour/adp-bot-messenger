@@ -1,10 +1,10 @@
 const login = require("facebook-chat-api")
 const fs = require("fs")
-const loginDataFile = "./login-data.json"
+const loginDataFile = "./config/login-data.json"
 const command = require("./command/botCommand")
 const botMessage = require("./command/botMessage")
 const messageDelay = 60 * 60 * 6 * 1000
-const config = JSON.parse(fs.readFileSync("./config.json"))
+const config = JSON.parse(fs.readFileSync("./config/config.json"))
 
 const loginDataExists = fs.existsSync(loginDataFile)
 let loginData
@@ -26,6 +26,8 @@ login(loginData, (err, api) => {
             console.error('failed to save appState : ' + JSON.stringify(err))
     })
 
+    let botId = api.getCurrentUserID()
+
     //Send the message each 6 hours
     setInterval(function () {
         api.getThreadList(999, null, [], (err, list) => {
@@ -40,11 +42,16 @@ login(loginData, (err, api) => {
     }, messageDelay);
 
     api.listen((err, message) => {
-        //parse message to see if it's command (!adp command)   
         console.log('Message received (from id ' + message.senderID + '): ' + message.body)
-        if (command.isCommand(message.body)) {
-            let response = command.parseCommand(message.body)
-            api.sendMessage(response, message.threadID);
+        if (message.senderID == botId) {
+            console.log('message from me')
+        }
+        else {
+            //parse message to see if it's command (!adp command)   
+            if (command.isCommand(message.body)) {
+                let response = command.parseCommand(message.body)
+                api.sendMessage(response, message.threadID);
+            }
         }
     })
 })

@@ -1,7 +1,7 @@
 const moment = require("moment")
 const fs = require("fs")
 
-const messages = JSON.parse(fs.readFileSync("./messages.json"))
+const messages = JSON.parse(fs.readFileSync("./config/messages.json"))
 const adpEndDate = moment("12/03/2020 23:59:59", "DD/MM/YYYY HH:mm:ss")
 
 function parse (str) {
