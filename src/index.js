@@ -4,7 +4,6 @@ const loginDataFile = "./config/login-data.json"
 const command = require("./command/botCommand")
 const botMessage = require("./command/botMessage")
 const messageDelay = 60 * 60 * 6 * 1000
-const config = JSON.parse(fs.readFileSync("./config/config.json"))
 
 const loginDataExists = fs.existsSync(loginDataFile)
 let loginData
@@ -13,6 +12,7 @@ if (loginDataExists) {
     loginData = { appState: JSON.parse(fs.readFileSync(loginDataFile)) }
 }
 else {
+    const config = JSON.parse(fs.readFileSync("./config/config.json"))
     loginData = { email: config.facebook.email, password: config.facebook.password }
 }
 
