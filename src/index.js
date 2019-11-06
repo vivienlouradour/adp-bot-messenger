@@ -4,6 +4,7 @@ const loginDataFile = "./config/login-data.json"
 const command = require("./command/botCommand")
 const botMessage = require("./command/botMessage")
 const messageDelay = 60 * 60 * 6 * 1000
+
 // create a rolling file logger based on date/time that fires process events
 const opts = {
     errorEventName: 'error',
@@ -33,39 +34,55 @@ login(loginData, (err, api) => {
     let appState = api.getAppState()
     fs.writeFile(loginDataFile, JSON.stringify(appState, null, 2), err => {
         if (err)
-            console.error('failed to save appState : ' + JSON.stringify(err))
+            log.error('failed to save appState : ' + JSON.stringify(err))
     })
 
     let botId = api.getCurrentUserID()
+
+    //Use recursion to send messages in good order
+    let sendMessages = (threadId, messages) => {
+        if (messages.length > 0) {
+            api.sendMessage(
+                messages[0],
+                threadId,
+                (err, messageInfo) => {
+                    sendMessages(threadId, messages.slice(1))
+                }
+            )
+            log.info('Message sent to ' + threadId + ' : ' + messages[0])
+        }
+    }
 
     //Send the message each 6 hours
     setInterval(function () {
         api.getThreadList(999, null, [], (err, list) => {
             if (err) return console.error(err)
             let groupIds = list.filter(thread => thread.isGroup).map(group => group.threadID)
-
-            let message = botMessage.getRandomMessage()
             log.info('sending automatic message to ' + groupIds.length + ' conversation(s)')
-            groupIds.forEach(groupId => api.sendMessage(message, groupId))
+
+            let messages = botMessage.getRandomMessages()
+            groupIds.forEach(groupId => {
+                sendMessages(groupId, messages)
+            })
         })
     }, messageDelay);
 
     api.listen((err, message) => {
-        if (message.senderID == botId) {
-
-        }
-        else {
+        if (message.senderID != botId) {
             //parse message to see if it's command (!adp command)   
             if (command.isCommand(message.body)) {
                 log.info('Command received from sender ' + message.senderID + ' : ' + message.body)
 
-                let response = command.parseCommand(message.body)
-                api.sendMessage(response, message.threadID)
-                log.info('Message sent to ' + message.senderID + ' : ' + response)
+                let responses = command.parseCommand(message.body)
+                sendMessages(message.threadID, responses)
             }
         }
     })
 })
+
+
+
+
 
 
 

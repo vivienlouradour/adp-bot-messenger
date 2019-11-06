@@ -8,11 +8,16 @@ exports.parseCommand = message => {
 
     switch (command.toLowerCase()) {
         case "info":
-            return botMessage.getRandomMessage()
+        case "infos":
+            return botMessage.getRandomMessages()
         case "help":
+        case "aide":
             return botMessage.getHelpMessage()
+        case "source":
+        case "sources":
+            return botMessage.getSourceMessage()
         default:
-            return 'mdr t ki ?'
+            return botMessage.getDefaultMessage()
     }
 }
 
