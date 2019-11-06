@@ -1,10 +1,10 @@
 const login = require("facebook-chat-api")
 const fs = require("fs")
-const loginDataFile = "./config/login-data.json"
+const loginDataFile = "../config/login-data.json"
 const command = require("./command/botCommand")
 const botMessage = require("./command/botMessage")
 const messageDelay = 60 * 60 * 6 * 1000
-const config = JSON.parse(fs.readFileSync("./config/config.json"))
+const config = JSON.parse(fs.readFileSync("../config/config.json"))
 
 const loginDataExists = fs.existsSync(loginDataFile)
 let loginData
